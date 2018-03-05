@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/milky_way_1049493_1920"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.dell.hotspotguard.HotSpotActivity">
+
+    <!-- Login progress -->
+    <ProgressBar
+        android:id="@+id/save_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/hot_spot_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/milky_way_1049493_1920"
+        android:backgroundTint="@android:color/transparent">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:backgroundTint="@color/colorPrimaryDark"
+
+                    android:imeActionId="6"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+
+                    android:maxLines="1"
+                    android:selectAllOnFocus="false"
+                    android:singleLine="true"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_light"
+
+                    android:textColorLink="@android:color/background_light"
+                    android:textCursorDrawable="@null"
+                    android:textStyle="bold" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <Button
+                android:id="@+id/start_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="Start"
+                android:textColor="@android:color/background_light"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:onClick="startAlarm"/>
+            <Button
+                android:id="@+id/stop_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="Stop"
+                android:textColor="@android:color/background_light"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:onClick="cancelAlarm"/>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
