@@ -4,8 +4,10 @@ package com.example.dell.hotspotguard;
  * Created by DELL on 3/1/2018.
  */
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -15,15 +17,24 @@ import java.lang.reflect.Method;
 import java.util.UUID;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    public String userSSID;
+
     @Override
     public void onReceive(Context callingContext, Intent arg1) {
-        Log.d("call","about to");
-        WifiManager wm = (WifiManager) callingContext.getSystemService(Context.WIFI_SERVICE);
+
+
+       DatabaseHelper myDb = new DatabaseHelper(callingContext.getApplicationContext());
+        Cursor response = myDb.fetchSsid();
+
+
+        WifiManager wm = (WifiManager) callingContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         WifiConfiguration wifi = new WifiConfiguration();
         String rand = UUID.randomUUID().toString().substring(0,8);
+        while(response.moveToNext()){
+            Log.d("ssid",response.getString(1));
+            wifi.SSID = response.getString(1);
+        }
 
-        wifi.SSID = "newkk"+rand;
+        //Log.d("ssid",getUserSSID());
         wifi.preSharedKey = rand;
         wifi.hiddenSSID = true;
         wifi.status = WifiConfiguration.Status.ENABLED;
@@ -34,10 +45,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         wifi.allowedKeyManagement.set(4);
         wifi.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
         wifi.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
-
-
-
-
         try{
             Method setWifi = wm.getClass().getMethod("setWifiApEnabled",WifiConfiguration.class, boolean.class);
             if((Boolean) setWifi.invoke(wm,wifi,true)){
@@ -45,8 +52,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                 Log.d("running","now");
                 setWifi.invoke(wm,wifi,false);
-
-
             }
 
 
@@ -55,12 +60,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             Log.d(this.getClass().toString(),"error",e);
         }
 
-
-
     }
-    public void setSSID(String ssid){
 
-        userSSID = ssid;
-        Log.d("id 2 b set",userSSID);
-    }
 }
