@@ -36,15 +36,18 @@ public class HotSpotActivity extends AppCompatActivity {
         startBtn = (Button) findViewById(R.id.start_button);
         stopBtn = (Button) findViewById(R.id.stop_button);
         myDb = new DatabaseHelper(this);
-
+        setupProp();
     }
 
     public void startAlarm(View view){
 
        if(!beginAction()){
             manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-            int interval = 10000;
+            //int interval = 86400000;//24hrs
+            //int interval = 7200000;
+            int interval = 5000;
             manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pendingIntent);
+           setupProp();
             Toast.makeText(this, "Alarm Set", Toast.LENGTH_SHORT).show();
         }
         //Toast.makeText(this, "working", Toast.LENGTH_SHORT).show();
@@ -55,9 +58,24 @@ public class HotSpotActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         manager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
         manager.cancel(pendingIntent);
+        myDb.SsidDelete();
+        setupProp();
         Toast.makeText(this, "Alarm Canceled", Toast.LENGTH_SHORT).show();
-    }
 
+
+    }
+    public void setupProp(){
+        int ssidCount = myDb.SsidCount();
+        if(ssidCount > 0){
+            yourName.setVisibility(View.GONE);
+            startBtn.setVisibility(View.GONE);
+            stopBtn.setVisibility(View.VISIBLE);
+        }else{
+            yourName.setVisibility(View.VISIBLE);
+            startBtn.setVisibility(View.VISIBLE);
+            stopBtn.setVisibility(View.GONE);
+        }
+    }
     private boolean beginAction() {
         yourName.setError(null);
         String wifi_id = yourName.getText().toString().trim();
@@ -71,16 +89,16 @@ public class HotSpotActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
+            myDb.SsidDelete();
             Boolean response = myDb.addSsidAcct(wifi_id);
             if(response){
-                    //Cursor fetch = myDb.fetchSsid();
-
                 Intent alarmIntent = new Intent(this, AlarmReceiver.class);
                 pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
             }else{
-                Log.d("msg","insert failure");
+                    Log.d("msg","insert failure");
             }
         }
+
         return cancel;
     }
 

@@ -66,4 +66,14 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Cursor result = db.rawQuery("SELECT * FROM "+ TABLE+" WHERE "+COLUMN_SSID_USERNAME+" != ''",null);
         return result;
     }
+    public Integer SsidCount(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("SELECT * FROM "+ TABLE+" WHERE "+COLUMN_SSID_USERNAME+" != ''",null);
+        return result.getCount();
+    }
+    public void SsidDelete(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE,COLUMN_SSID_ID+" != ''",null);
+
+    }
 }
